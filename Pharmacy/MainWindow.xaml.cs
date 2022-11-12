@@ -81,6 +81,33 @@ namespace Pharmacy
             usersDataList.ItemsSource = usersList;
             usersDataList.Items.Refresh();
         }
+
+        private void loginBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (loginUsername.Text=="a" && loginPassword.Password.ToString() =="a")
+            {
+                tabGeneral.IsEnabled = true;
+                tabMember.IsEnabled = true;
+                tabMember.IsSelected = true;
+                tabLogin.Header = "Logout";
+                loginUsername.Clear();
+                loginPassword.Clear();
+                loginGroupBox.Visibility = Visibility.Hidden;
+                logoutBtn.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void logoutBtn_Click(object sender, RoutedEventArgs e)
+        {
+            tabLogin.IsSelected = true;
+            tabGeneral.IsEnabled = false;
+            tabMember.IsEnabled = false;
+            
+            tabLogin.Header = "Login";
+            loginGroupBox.Visibility = Visibility.Visible;
+            logoutBtn.Visibility = Visibility.Hidden;
+        }
+
     }
     public class User
     {
