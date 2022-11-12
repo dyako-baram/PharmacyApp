@@ -14,4 +14,5 @@ namespace Pharmacy
     public partial class App : Application
     {
     }
+
 }

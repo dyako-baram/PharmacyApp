@@ -5,8 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pharmacy"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="MainWindow" Height="450" Width="800"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        ui:ThemeManager.RequestedTheme="Light">
+    <Border>
+        <Grid>
+            <TabControl >
+                <TabItem Header="General">
+                    <!--<ScrollViewer  Width="300" BorderBrush="Black" BorderThickness="1" x:Name="svPrint">
+                       <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Width="50" Margin="5"  Grid.Column="0" Height="50" Source="Resources/pharmacy.jpg" />
+                                <TextBlock FontWeight="ExtraBold" FontStyle="Italic" VerticalAlignment="Center" Grid.Column="1">
+                                    <TextBlock Text="Sample "/>
+                                     <TextBlock Text="Pharmacy" Foreground="red"/>
+                                </TextBlock>
+                            </Grid>
+                            <Separator Margin="5"/>
+                            
+                        </StackPanel> 
+                    </ScrollViewer>-->
+                    
+                </TabItem>
+                <TabItem Header="Members" >
+                    <Border>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="8 15 0 0" Text="List of Members" FontSize="15" HorizontalAlignment="Left"/>
+                            <Button HorizontalAlignment="Right" Grid.Row="0" Content="Add new Member" Background="blue" Foreground="White" Margin="0 0 15 0" Click="Button_Click_1"/>
+                            
+                            <DataGrid Grid.Row="1" BorderBrush="#888" BorderThickness="1"
+                                      CanUserAddRows="False" 
+                                      IsReadOnly="True"
+                                      SelectionMode="Single" 
+                                      CanUserReorderColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
+                                      Name="usersDataList">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn DisplayIndex="5" Header="Delete Member">
+                                        <DataGridTemplateColumn.CellTemplate >
+                                            <DataTemplate>
+                                                <Button Margin="0 3 0 3" Background="red" Foreground="White" HorizontalAlignment="Stretch" x:Name="deleteMember" Content="Delete" Click="deleteMember_Click"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <ui:ContentDialog  CloseButtonText="Cancel" DefaultButton="Primary" Title="Create New Member" PrimaryButtonText="Create Member" x:Name="ContentNewMember">
+                                <StackPanel>
+                                    <Label  Content="Name:"/>
+                                    <TextBox x:Name="contentName"/>
+                                    <Label Margin="0 5 0 0" Content="Email:"/>
+                                    <TextBox x:Name="contentEmail"/>
+                                    <Label Content="Password:"/>
+                                    <PasswordBox x:Name="contentPassword"/>
+                                    <Label Margin="0 5 0 0" Content="Repeat Password:"/>
+                                    <PasswordBox x:Name="contentPasswordRepeat"/>
+                                    <Label Margin="0 5 0 0" Content="Role:"/>
+                                    <TextBox x:Name="contentRole"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                    </Grid>
+                                </StackPanel>
+                            </ui:ContentDialog>
+                            
+                        </Grid>
+                    </Border>
+                    
+                </TabItem>
+                <TabItem Header="Details" >
+                    <Label Content="page 3"/>
+                </TabItem>
+            </TabControl>
+        </Grid>
+        
+    </Border>
 </Window>
