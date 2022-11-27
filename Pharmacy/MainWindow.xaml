@@ -13,24 +13,60 @@
     <Border>
         <Grid>
             <TabControl >
-                <TabItem Header="General" x:Name="tabGeneral" IsEnabled="False" >
-                    <!--<ScrollViewer  Width="300" BorderBrush="Black" BorderThickness="1" x:Name="svPrint">
-                       <StackPanel>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                </Grid.ColumnDefinitions>
-                                <Image Width="50" Margin="5"  Grid.Column="0" Height="50" Source="Resources/pharmacy.jpg" />
-                                <TextBlock FontWeight="ExtraBold" FontStyle="Italic" VerticalAlignment="Center" Grid.Column="1">
-                                    <TextBlock Text="Sample "/>
-                                     <TextBlock Text="Pharmacy" Foreground="red"/>
-                                </TextBlock>
-                            </Grid>
-                            <Separator Margin="5"/>
-                            
-                        </StackPanel> 
-                    </ScrollViewer>-->
+                <TabItem Header="General" x:Name="tabGeneral" IsEnabled="True" IsSelected="True">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <DataGrid Grid.Column="0" x:Name="sellDataGrid"
+                                  ItemsSource="{Binding sellList}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  SelectionMode="Single" 
+                                  >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Price" Binding="{Binding Price,StringFormat=C}"/>
+                                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}"/>
+                                <DataGridTextColumn Header="Total" Binding="{Binding Total,StringFormat=C}"/>
+                                <DataGridTemplateColumn Width="50">
+                                    <DataGridTemplateColumn.CellTemplate >
+                                        <DataTemplate>
+                                            <Button Margin="3" Background="#a5f568" Foreground="White" HorizontalAlignment="Stretch" x:Name="increaseItem" Click="increaseItem_Click" Content="+"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn  Width="50">
+                                    <DataGridTemplateColumn.CellTemplate >
+                                        <DataTemplate>
+                                            <Button Margin="3" Background="#fcd203" Foreground="White" HorizontalAlignment="Stretch" x:Name="decreaseItem" Click="decreaseItem_Click" Content="-"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn   Width="50">
+                                    <DataGridTemplateColumn.CellTemplate >
+                                        <DataTemplate>
+                                            <Button Margin="3" Background="#ff5455" Foreground="White" HorizontalAlignment="Stretch" x:Name="deleteItem" Click="deleteItem_Click" Content="x"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Border BorderBrush="gray" BorderThickness="1" Grid.Column="1">
+                            <StackPanel Margin="5">
+                                <TextBlock Text="Barcode:"/>
+                                <TextBox Margin="0 5" x:Name="barcodeText"/>
+                                <TextBlock x:Name="sellTotal"/>
+                                <Button Content="Add" x:Name="addItemToDatagrid" Click="addItemToDatagrid_Click"  HorizontalAlignment="Stretch" />
+                                <Button Content="Sell" HorizontalAlignment="Stretch" />
+                            </StackPanel>
+                        </Border>
+                        
+                        
+                    </Grid>
                     
                 </TabItem>
                 <TabItem Header="Members" x:Name="tabMember" IsEnabled="False" >
@@ -85,7 +121,7 @@
                     </Border>
 
                 </TabItem>
-                <TabItem Header="login" x:Name="tabLogin" IsEnabled="True" IsSelected="True">
+                <TabItem Header="login" x:Name="tabLogin" IsEnabled="True" IsSelected="False">
                     
                     <StackPanel Width="300">
                         <Button 

@@ -1,6 +1,7 @@
 ﻿using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Printing;
 using System.Text;
@@ -24,6 +25,8 @@ namespace Pharmacy
     {
         List<User> usersList;
         List<Product> productList;
+        List<Sell> sellList;
+        CultureInfo culture = new CultureInfo("en-US");
         public MainWindow()
         {
             InitializeComponent();
@@ -37,8 +40,17 @@ namespace Pharmacy
             productList.Add(new Product() {Id=2,Name="P2",Price=5,Quantity=2});
             productList.Add(new Product() {Id=3,Name="P3",Price=1,Quantity=4 });
             productList.Add(new Product() {Id=4,Name="P4",Price=2.50,Quantity=3 });
+            sellList = new();
+            sellList.Add(new Sell() { Name = "P1", Price = 2.50, Quantity = 1 });
+            sellList.Add(new Sell() { Name = "P2", Price = 5, Quantity = 1 });
+            sellList.Add(new Sell() { Name = "P3", Price = 3, Quantity = 1 });
+            sellList.Add(new Sell() { Name = "P4", Price = 1.50, Quantity = 2 });
+            sellList.Add(new Sell() { Name = "P5", Price = 0.50, Quantity = 3 });
+            sellDataGrid.ItemsSource = sellList;
+            var c= new CultureInfo("en-US");
+            sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
             
-            
+
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -88,7 +100,7 @@ namespace Pharmacy
             {
                 tabGeneral.IsEnabled = true;
                 tabMember.IsEnabled = true;
-                tabMember.IsSelected = true;
+                tabGeneral.IsSelected = true;
                 tabLogin.Header = "Logout";
                 loginUsername.Clear();
                 loginPassword.Clear();
@@ -108,6 +120,51 @@ namespace Pharmacy
             logoutBtn.Visibility = Visibility.Hidden;
         }
 
+        private void increaseItem_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            var res = button.DataContext as Sell;
+            var index = sellList.FindIndex(x=>x.Name==res.Name);
+            sellList[index].Quantity += 1;
+            sellDataGrid.ItemsSource = sellList;
+            sellDataGrid.Items.Refresh();
+            sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
+        }
+
+        private void decreaseItem_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            var res = button.DataContext as Sell;
+            var index = sellList.FindIndex(x => x.Name == res.Name);
+            sellList[index].Quantity -= 1;
+            if (sellList[index].Quantity==0)
+            {
+                sellList.RemoveAll(x => x.Name == res.Name);
+            }
+            sellDataGrid.ItemsSource = sellList;
+            sellDataGrid.Items.Refresh();
+            sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
+        }
+
+        private void deleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            var res = button.DataContext as Sell;
+            sellList.RemoveAll(x => x.Name == res.Name);
+            sellDataGrid.ItemsSource = sellList;
+            sellDataGrid.Items.Refresh();
+            sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
+        }
+
+        private void addItemToDatagrid_Click(object sender, RoutedEventArgs e)
+        {
+            
+            var index = sellList.FindIndex(x => x.Name.ToLower() == barcodeText.Text.ToLower());
+            sellList[index].Quantity += 1;
+            sellDataGrid.ItemsSource = sellList;
+            sellDataGrid.Items.Refresh();
+            sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
+        }
     }
     public class User
     {
@@ -124,5 +181,12 @@ namespace Pharmacy
         public string Name { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
+    }
+    public class Sell
+    {
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int Quantity { get; set; }
+        public double Total { get { return Price * Quantity;}}
     }
 }
