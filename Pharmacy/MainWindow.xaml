@@ -19,8 +19,11 @@
                             <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-
-                        <DataGrid Grid.Column="0" x:Name="sellDataGrid"
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid Grid.Row="0" Grid.Column="0" x:Name="sellDataGrid"
                                   ItemsSource="{Binding sellList}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
@@ -52,24 +55,37 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Border BorderBrush="gray" BorderThickness="1" Grid.Column="1">
+                        <Border Grid.Row="0" BorderBrush="gray" BorderThickness="1" Grid.Column="1">
                             <StackPanel Margin="5">
                                 <TextBlock Text="Barcode:"/>
                                 <TextBox Margin="0 5" x:Name="barcodeText"/>
-                                <TextBlock x:Name="sellTotal"/>
+
                                 <Button Content="Add" x:Name="addItemToDatagrid" Click="addItemToDatagrid_Click"  HorizontalAlignment="Stretch" />
                                 <Button Content="Sell" HorizontalAlignment="Stretch" />
                             </StackPanel>
                         </Border>
-                        
-                        
+                        <Border Grid.Row="1" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="15 0 0 0" x:Name="sellTotal"/>
+                                <TextBlock Margin="15 0 0 0" x:Name="sellCount"/>
+                            </StackPanel>
+                        </Border>
                     </Grid>
-                    
                 </TabItem>
-                <TabItem Header="Members" x:Name="tabMember" IsEnabled="False" >
+                <TabItem Header="Inverntory" x:Name="tabInventory" IsEnabled="True" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid Grid.Row="0" IsReadOnly="True" SelectionMode="Single">
+                            
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Members" x:Name="tabMember" IsEnabled="True" >
                     <Border>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -77,7 +93,8 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Margin="8 15 0 0" Text="List of Members" FontSize="15" HorizontalAlignment="Left"/>
-                            <Button HorizontalAlignment="Right" Grid.Row="0" Content="Add new Member" Background="blue" Foreground="White" Margin="0 0 15 0" Click="Button_Click_1"/>
+                            <Button HorizontalAlignment="Right" Grid.Row="0" Content="Add new Member" Background="blue" Foreground="White" Margin="0 0 15 0"
+                                    Click="AddnewMEmberBtn_Click"/>
 
                             <DataGrid Grid.Row="1" BorderBrush="#888" BorderThickness="1"
                                       CanUserAddRows="False" 

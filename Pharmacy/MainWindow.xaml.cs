@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Pharmacy.Model;
 
 namespace Pharmacy
 {
@@ -26,6 +27,7 @@ namespace Pharmacy
         List<User> usersList;
         List<Product> productList;
         List<Sell> sellList;
+        Sell lastSoldItem =new Sell();
         CultureInfo culture = new CultureInfo("en-US");
         public MainWindow()
         {
@@ -36,37 +38,40 @@ namespace Pharmacy
             usersList.Add(new User() { Id = 3, Name = "Sammy Doe", Age = 26, Email = "sammy.doe@gmail.com", Role="Employee"});
             usersDataList.ItemsSource = usersList;
             productList = new List<Product>();
-            productList.Add(new Product() {Id=1,Name="P1",Price=2.50,Quantity=1 });
-            productList.Add(new Product() {Id=2,Name="P2",Price=5,Quantity=2});
-            productList.Add(new Product() {Id=3,Name="P3",Price=1,Quantity=4 });
-            productList.Add(new Product() {Id=4,Name="P4",Price=2.50,Quantity=3 });
+            productList.Add(new Product() { Id = 1, Name = "P1", Price = 2.50, Quantity = 1 });
+            productList.Add(new Product() { Id = 2, Name = "P2", Price = 5, Quantity = 2 });
+            productList.Add(new Product() { Id = 3, Name = "P3", Price = 1, Quantity = 4 });
+            productList.Add(new Product() { Id = 4, Name = "P4", Price = 2.50, Quantity = 3 });
             sellList = new();
             sellList.Add(new Sell() { Name = "P1", Price = 2.50, Quantity = 1 });
             sellList.Add(new Sell() { Name = "P2", Price = 5, Quantity = 1 });
             sellList.Add(new Sell() { Name = "P3", Price = 3, Quantity = 1 });
             sellList.Add(new Sell() { Name = "P4", Price = 1.50, Quantity = 2 });
             sellList.Add(new Sell() { Name = "P5", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P6", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P7", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P8", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P9", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P10", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P11", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P12", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P13", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P14", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P15", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P16", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P17", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P18", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P19", Price = 0.50, Quantity = 3 });
+            //sellList.Add(new Sell() { Name = "P20", Price = 0.50, Quantity = 3 });
             sellDataGrid.ItemsSource = sellList;
             var c= new CultureInfo("en-US");
             sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
-            
+            sellCount.Text = $"Amount of items: {sellList.Select(x => x.Quantity).Sum()}";
+
 
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            ContentDialog noWifiDialog = new ContentDialog
-            {
-                Title = "Did you press me",
-                Content = "this is where you put the message",
-                CloseButtonText = "Ok"
-            };
-
-            ContentDialogResult result = await noWifiDialog.ShowAsync();
-
-        }
-
-        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        private async void AddnewMEmberBtn_Click(object sender, RoutedEventArgs e)
         {
             var content =await ContentNewMember.ShowAsync();
             switch (content)
@@ -94,31 +99,7 @@ namespace Pharmacy
             usersDataList.Items.Refresh();
         }
 
-        private void loginBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (loginUsername.Text=="a" && loginPassword.Password.ToString() =="a")
-            {
-                tabGeneral.IsEnabled = true;
-                tabMember.IsEnabled = true;
-                tabGeneral.IsSelected = true;
-                tabLogin.Header = "Logout";
-                loginUsername.Clear();
-                loginPassword.Clear();
-                loginGroupBox.Visibility = Visibility.Hidden;
-                logoutBtn.Visibility = Visibility.Visible;
-            }
-        }
 
-        private void logoutBtn_Click(object sender, RoutedEventArgs e)
-        {
-            tabLogin.IsSelected = true;
-            tabGeneral.IsEnabled = false;
-            tabMember.IsEnabled = false;
-            
-            tabLogin.Header = "Login";
-            loginGroupBox.Visibility = Visibility.Visible;
-            logoutBtn.Visibility = Visibility.Hidden;
-        }
 
         private void increaseItem_Click(object sender, RoutedEventArgs e)
         {
@@ -126,6 +107,7 @@ namespace Pharmacy
             var res = button.DataContext as Sell;
             var index = sellList.FindIndex(x=>x.Name==res.Name);
             sellList[index].Quantity += 1;
+            lastSoldItem = sellList[index];
             sellDataGrid.ItemsSource = sellList;
             sellDataGrid.Items.Refresh();
             sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
@@ -141,9 +123,11 @@ namespace Pharmacy
             {
                 sellList.RemoveAll(x => x.Name == res.Name);
             }
+            lastSoldItem = sellList[index];
             sellDataGrid.ItemsSource = sellList;
             sellDataGrid.Items.Refresh();
             sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
+            sellCount.Text = $"Amount of items: {sellList.Select(x => x.Quantity).Sum()}";
         }
 
         private void deleteItem_Click(object sender, RoutedEventArgs e)
@@ -154,6 +138,7 @@ namespace Pharmacy
             sellDataGrid.ItemsSource = sellList;
             sellDataGrid.Items.Refresh();
             sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
+            sellCount.Text = $"Amount of items: {sellList.Select(x => x.Quantity).Sum()}";
         }
 
         private void addItemToDatagrid_Click(object sender, RoutedEventArgs e)
@@ -161,32 +146,14 @@ namespace Pharmacy
             
             var index = sellList.FindIndex(x => x.Name.ToLower() == barcodeText.Text.ToLower());
             sellList[index].Quantity += 1;
+            lastSoldItem = sellList[index];
             sellDataGrid.ItemsSource = sellList;
             sellDataGrid.Items.Refresh();
             sellTotal.Text = $"Total: {sellList.Select(x => x.Total).Sum().ToString("C", culture)}";
+            sellCount.Text = $"Amount of items: {sellList.Select(x=>x.Quantity).Sum()}";
         }
     }
-    public class User
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Age { get; set; }
-        public string Email { get; set; }
-        
-        public string Role { get; set; }
-    }
-    public class Product
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public int Quantity { get; set; }
-    }
-    public class Sell
-    {
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public int Quantity { get; set; }
-        public double Total { get { return Price * Quantity;}}
-    }
+
+    
+    
 }
